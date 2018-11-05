@@ -1,0 +1,198 @@
+{
+  "techsByColor": {
+    "red": [
+      {
+        "name": "Neutron Bombs",
+        "category": "other"
+      },
+      {
+        "name": "Starbase",
+        "category": "other",
+        "description": "Build: Starbases"
+      },
+      {
+        "name": "Plasma Cannon",
+        "category": "ship",
+        "description": "Weapon: Cannon: 2 Damage",
+        "power": 2
+      },
+      {
+        "name": "Phase Shield",
+        "category": "ship",
+        "description": "Shield: +2",
+        "power": 1
+      },
+      {
+        "name": "Advanced Mining",
+        "category": "other"
+      },
+      {
+        "name": "Tachyon Source",
+        "category": "ship",
+        "description": "Power: +9"
+      },
+      {
+        "name": "Plasma Missile",
+        "category": "ship",
+        "description": "Weapon: Missile (2x2)",
+        "power": "N"
+      },
+      {
+        "name": "Gluon Computer",
+        "category": "ship",
+        "description": "Computer: +3🎯 / +2^",
+        "power": 2
+      }
+    ],
+    "blue": [
+      {
+        "name": "Gauss Shield",
+        "category": "ship",
+        "description": "Shield: +1",
+        "power": 0
+      },
+      {
+        "name": "Improved Hull",
+        "category": "ship",
+        "description": "Hull: +2",
+        "power": 0
+      },
+      {
+        "name": "Fusion Source",
+        "category": "ship",
+        "description": "Power: +6"
+      },
+      {
+        "name": "Positron Computer",
+        "category": "ship",
+        "description": "Computer: +2 🎯 / +1^",
+        "power": 1
+      },
+      {
+        "name": "Advanced Economy",
+        "category": "other"
+      },
+      {
+        "name": "Tachyon Drive",
+        "category": "ship",
+        "description": "Drive: +3⬡ +3^",
+        "power": 3
+      },
+      {
+        "name": "Antimatter Cannon",
+        "category": "ship",
+        "description": "Weapon: Cannon: 4 Damage",
+        "power": 4
+      },
+      {
+        "name": "Quantum Grid",
+        "category": "other",
+        "description": "Influence: +2"
+      }
+    ],
+    "yellow": [
+      {
+        "name": "Nanobots",
+        "category": "other",
+        "description": "Build: +1"
+      },
+      {
+        "name": "Fusion Drive",
+        "category": "ship",
+        "description": "Drive: +2⬡ +2^",
+        "power": 2
+      },
+      {
+        "name": "Advanced Robotics",
+        "category": "other",
+        "description": "Influence: +1"
+      },
+      {
+        "name": "Orbital",
+        "category": "other",
+        "description": "Build: Orbitals"
+      },
+      {
+        "name": "Advanced Labs",
+        "category": "other"
+      },
+      {
+        "name": "Monolith",
+        "category": "other",
+        "description": "Build: Monoliths"
+      },
+      {
+        "name": "Artifact Key",
+        "category": "other"
+      },
+      {
+        "name": "Wormhole Generator",
+        "category": "other"
+      }
+    ]
+  },
+  "stats": [
+    {
+      "cost": 2,
+      "minCost": 2,
+      "count": 5
+    },
+    {
+      "cost": 4,
+      "minCost": 3,
+      "count": 5
+    },
+    {
+      "cost": 6,
+      "minCost": 4,
+      "count": 5
+    },
+    {
+      "cost": 8,
+      "minCost": 5,
+      "count": 4
+    },
+    {
+      "cost": 10,
+      "minCost": 6,
+      "count": 4
+    },
+    {
+      "cost": 12,
+      "minCost": 6,
+      "count": 3
+    },
+    {
+      "cost": 14,
+      "minCost": 7,
+      "count": 3
+    },
+    {
+      "cost": 16,
+      "minCost": 8,
+      "count": 3
+    }
+  ],
+  "colors": {
+    "red": {
+      "name": "Red",
+      "index": 0
+    },
+    "blue": {
+      "name": "Blue",
+      "index": 1
+    },
+    "yellow": {
+      "name": "Yellow",
+      "index": 2
+    }
+  },
+  "categories": {
+    "other": {
+      "name": "Civilization"
+    },
+    "ship": {
+      "name": "Ship"
+    }
+  }
+}
