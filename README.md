@@ -1,6 +1,6 @@
-# eclipse-helper-frontend
+# eclipse-helper
 
-> 
+> A Vue.js project
 
 ## Build Setup
 
