@@ -1,2 +1,2 @@
 web: python server.py
-release: bin/release.sh
+release: cd frontend && npm run build
