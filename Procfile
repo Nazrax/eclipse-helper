@@ -1,2 +1,1 @@
-web: python server.py
-release: npm --production=false install && npm run build
+web: npm run build && python server.py
