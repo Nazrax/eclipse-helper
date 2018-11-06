@@ -5,7 +5,7 @@
     <td>{{ tech.cost }} / {{ tech.minCost }}</td>
     <td v-html="used"></td>
     <td>{{ tech.drawn }}/{{ tech.count }} <button @click="draw">Draw</button><button @click="undraw">Undraw</button></td>
-    <td>{{ tech.purchased }}/{{tech.drawn}} <button @click="purchase">Purchase</button><button @click="unpurchase">Unpurchase</button></td>
+    <td>{{ tech.used }}/{{tech.drawn}} <button @click="purchase">Purchase</button><button @click="unpurchase">Unpurchase</button></td>
   </tr>
 </template>
 
@@ -13,8 +13,8 @@
   const emptyBox = "☐"
   const checkedBox = "☑"
   const xBox = "☒"
-  const hex = "⬡"
-  const chevron = "^"
+  // const hex = "⬡"
+  // const chevron = "^"
 
   export default {
     props: ['tech', 'socket', 'useDescription'],
@@ -37,7 +37,7 @@
         let rv = ""
         for(let i=0; i<this['tech'].count; i++) {
           if (i < this['tech'].drawn) {
-            if (i < this['tech'].purchased) {
+            if (i < this['tech'].used) {
               rv += "<color='red'>" + xBox + "</color>"
             } else {
               rv += "<color='green'>" + checkedBox + "</color>"
@@ -52,28 +52,19 @@
     methods: {
       draw: function() {
         console.log("Drawing")
-        // if (this['tech'].drawn < this['tech'].count) {
-        //   this['tech'].drawn += 1
-        // }
         this['socket'].send(JSON.stringify({key: this['tech'].key, field: 'drawn', action: "inc"}))
       },
       undraw: function() {
         console.log("Undrawing")
-        // if (this['tech'].drawn > 0)
-        //   this['tech'].drawn -= 1
         this['socket'].send(JSON.stringify({key: this['tech'].key, field: 'drawn', action: "dec"}))
       },
       purchase: function() {
         console.log("Purchasing")
-        // if (this['tech'].purchased < this['tech'].drawn)
-        //   this['tech'].purchased += 1
-        this['socket'].send(JSON.stringify({key: this['tech'].key, field: 'purchased', action: "inc"}))
+        this['socket'].send(JSON.stringify({key: this['tech'].key, field: 'used', action: "inc"}))
       },
       unpurchase: function() {
         console.log("Unpurchasing")
-        // if (this['tech'].purchased > 0)
-        //   this['tech'].purchased -= 1
-        this['socket'].send(JSON.stringify({key: this['tech'].key, field: 'purchased', action: "dec"}))
+        this['socket'].send(JSON.stringify({key: this['tech'].key, field: 'used', action: "dec"}))
       },
     },
   }

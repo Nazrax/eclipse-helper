@@ -4,6 +4,7 @@
 # The source code for this program is not published or otherwise divested of its trade secrets,
 # irrespective of what has been deposited with the U.S. Copyright Office.
 
+import copy
 import json
 import logging
 import os
@@ -11,10 +12,10 @@ import re
 
 import requests
 from tornado.options import define, options
+import tornado
 import tornado.web
 import tornado.websocket
 
-import asyncio
 import aioredis
 
 
@@ -25,36 +26,70 @@ DEV_MODE = False
 TECHS_JSON_RE = re.compile(r"^/techs/(\w+).json$")
 WS_JSON_RE = re.compile(r"^/websocket/(\w+)$")
 
+pool = None
+
+
+async def get_key_as_int(key):
+  with await pool as redis:
+    v = await redis.get(key)
+
+  return int(v) if v else 0
+
+
+async def set_key(key, value):
+  with await pool as redis:
+    logging.info("Updating Redis: Setting %s to %s" % (key, value))
+    await redis.set(key, value)
+
+
+# TODO Actually implement this
+async def set_key_cas(key, old, new):
+  _ = old
+  await set_key(key, new)
+
 
 class Game:
-  games = {}
+  cache_loaded = False
+  colors = {}
+  tech_cache = {}
+  categories = {}
 
-  def __init__(self):
+  def __init__(self, game_id):
+    cls = type(self)
+    self.game_id = game_id
     self.techs = {}
-    self.colors = {}
-    self.categories = {}
 
-    self.load_techs()
+    cls.load_cache()
+    self.techs = copy.deepcopy(cls.tech_cache)
+
+  async def load_counts(self):
+    for tech in self.techs.values():
+      await self.load_counts_for(tech)
+
+  async def load_counts_for(self, tech):
+    tech['used'] = await self.get_value(tech['key'], 'used')
+    tech['drawn'] = await self.get_value(tech['key'], 'drawn')
+
+  async def get_value(self, tech_key, suffix):
+    key = f"{self.game_id}/{tech_key}/{suffix}"
+    value = await get_key_as_int(f"{key}")
+    return value
 
   @classmethod
-  def get_game(cls, game_id):
-    if game_id not in cls.games:
-      logging.info("Loading game ID %s" % game_id)
-      cls.games[game_id] = Game()
+  def load_cache(cls):
+    if cls.cache_loaded:
+      return
 
-    return cls.games[game_id]
-
-  def load_techs(self):
     with open(os.path.join(DATA_PATH, 'techs.json')) as f:
       data = json.load(f)
 
-    self.colors = data['colors']
-    self.categories = data['categories']
+    cls.colors = data['colors']
+    cls.categories = data['categories']
 
-    for color in self.colors.values():
+    for color in cls.colors.values():
       color['techs'] = []
 
-    for category in self.categories.values():
+    for category in cls.categories.values():
       category['techs'] = []
 
     stats = data['stats']
@@ -65,13 +100,13 @@ class Game:
         tech['cost'] = stats[i]['cost']
         tech['minCost'] = stats[i]['minCost']
         tech['count'] = stats[i]['count']
-        tech['drawn'] = 0  # TODO Rig up Reddis
-        tech['purchased'] = 0  # TODO Rig up Reddis
         tech['color'] = color
 
-        self.techs[tech['key']] = tech
-        self.categories[tech['category']]['techs'].append(tech['key'])
-        self.colors[color]['techs'].append(tech['key'])
+        cls.tech_cache[tech['key']] = tech
+        cls.categories[tech['category']]['techs'].append(tech['key'])
+        cls.colors[color]['techs'].append(tech['key'])
+
+    cls.cache_loaded = True
 
 
 class Application(tornado.web.Application):
@@ -113,11 +148,12 @@ class TechsJsonHandler(tornado.web.RequestHandler):
   def data_received(self, chunk):
     raise NotImplementedError
 
-  def get(self, *args, **kwargs):
+  async def get(self, *args, **kwargs):
     match = re.match(TECHS_JSON_RE, self.request.uri)
     if match:
-      game_id = match.groups()[0]
-      game = Game.get_game(game_id)
+      game_id = match.groups()[0].strip()
+      game = Game(game_id)
+      await game.load_counts()
 
       self.set_header("Content-Type", 'application/javascript')
       self.set_header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
@@ -149,7 +185,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     logging.info("Client connected")
     match = re.match(WS_JSON_RE, self.request.uri)
     if match:
-      self.game_id = match.groups()[0]
+      self.game_id = match.groups()[0].strip()
     else:
       logging.warning("URI %s didn't match pattern" % self.request.uri)
       return
@@ -175,25 +211,27 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
       except Exception:
         logging.error("Error sending message", exc_info=True)
 
-  def on_message(self, message):
+  async def on_message(self, message):
     logging.info("Got message %r for %s" % (message, self.game_id))
-    parsed = tornado.escape.json_decode(message)
+    parsed = json.loads(message)
     tech_key = parsed['key']
     field = parsed['field']
     action = parsed['action']
 
-    game = Game.get_game(self.game_id)
+    game = Game(self.game_id)
 
     if tech_key not in game.techs:
       logging.warning("Invalid tech key provided: %s" % message)
       return
 
     tech = game.techs[tech_key]
+    await game.load_counts_for(tech)
+
     send_updates = False
     if field == 'drawn':
       ceiling = tech['count']
-      floor = tech['purchased']
-    elif field == 'purchased':
+      floor = tech['used']
+    elif field == 'used':
       ceiling = tech['drawn']
       floor = 0
     else:
@@ -218,7 +256,16 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
     if send_updates:
       logging.info(f"{tech_key}:{field} is now {tech[field]}")
+      await set_key_cas(f"{self.game_id}/{tech_key}/{field}", -1, tech[field])
       type(self).send_updates(self.game_id, json.dumps({'key': tech_key, 'field': field, 'value': tech[field]}))
+
+
+async def create_pool(redis_url):
+  global pool
+
+  logging.info("Creating Redis pool")
+  pool = await aioredis.create_redis_pool(redis_url, minsize=1, maxsize=5)
+
 
 def main():
   global STATIC_PATH, DEV_MODE
@@ -226,9 +273,10 @@ def main():
   # TECH_TRACKER = TechTracker()
 
   define("port", default=os.environ.get('PORT', 8888), help="run on the given port", type=int)
+  define("redis-url", default=os.environ.get("REDIS_URL", "redis://localhost"))
   define("dev", default=False, help="run in dev mode", type=bool)
 
-  tornado.options.parse_command_line()
+  options.parse_command_line()
   DEV_MODE = options.dev
 
   # if DEV_MODE:
@@ -239,6 +287,7 @@ def main():
   logging.info("MAIN starting up")
   app = Application()
   app.listen(options.port)
+  tornado.ioloop.IOLoop.current().run_sync(lambda: create_pool(options.redis_url))
   logging.info("Starting main loop")
   tornado.ioloop.IOLoop.current().start()
 

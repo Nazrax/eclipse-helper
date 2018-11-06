@@ -6,14 +6,14 @@
       <button @click="showColor('blue')">Blue</button>
       <button @click="showColor('yellow')">Yellow</button>
     </p>
-    <p>{{ colors[currentColor].name }}</p>
-    <techs-by-color2 :techs="techs" :tech-keys="colors[currentColor].techs" :socket="socket"></techs-by-color2>
+    <p>{{ colors[currentColor] && colors[currentColor].name }}</p>
+    <techs-by-color2 v-if="colors[currentColor]" :techs="techs" :tech-keys="colors[currentColor].techs" :socket="socket"></techs-by-color2>
 
-    <ul>
-      <li v-for="colorKey in sortByIndex(Object.keys(colors))">{{ colors[colorKey].name }}:
-        <techs-by-color2 :techs="techs" :tech-keys="colors[colorKey].techs" :socket="socket"></techs-by-color2>
-      </li>
-    </ul>
+    <!--<ul>-->
+      <!--<li v-for="colorKey in sortByIndex(Object.keys(colors))">{{ colors[colorKey].name }}:-->
+        <!--<techs-by-color2 :techs="techs" :tech-keys="colors[colorKey].techs" :socket="socket"></techs-by-color2>-->
+      <!--</li>-->
+    <!--</ul>-->
   </div>
 </template>
 
@@ -37,7 +37,6 @@
         const sortFunc = function(keyA, keyB) {
           const a = ths.colors[keyA]['index']
           const b = ths.colors[keyB]['index']
-          console.log(`${keyA}: ${a}, ${keyB}: ${b}`)
           return a > b ? 1 : b > a ? -1 : 0
         }
         return keys.sort(sortFunc)
