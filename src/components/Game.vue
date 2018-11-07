@@ -26,7 +26,8 @@
         categories: {},
         colors: {},
         socket: null,
-        currentComponent: 'techs-by-color'
+        currentComponent: 'techs-by-category',
+        reconnectScheduled: false
       }
     },
     created() {
@@ -41,11 +42,7 @@
         })
     },
     mounted: function() {
-      let proto = location.protocol === 'https:' ? 'wss' : 'ws'
-      let url = `${proto}://${location.host}/websocket/${this.id}`
-      console.log(`Connecting to websocket URL ${url}`)
-      this.socket = new WebSocket(url)
-      this.socket.onmessage = this.handleMessage
+      this.connect()
     },
     methods: {
       'handleMessage': function(event) {
@@ -57,6 +54,51 @@
       },
       'setComponent': function(component) {
         this.currentComponent = component
+      },
+      'connect': function() {
+        let proto = location.protocol === 'https:' ? 'wss' : 'ws'
+        let url = `${proto}://${location.host}/websocket/${this.id}`
+        console.log(`Connecting to websocket URL ${url}`)
+
+        this.socket = new WebSocket(url)
+        this.socket.onopen = this.handleSocketConnected
+        this.socket.onmessage = this.handleMessage
+        this.socket.onclose = this.handleSocketClosed
+        this.socket.onerror = this.handleSocketError
+        this.reconnectScheduled = false
+      },
+      'reconnect': function() {
+        if (this.reconnectScheduled) {  // Race condition!
+          console.log("Reconnect already scheduled; not scheduling a new one")
+        } else {
+          this.reconnectScheduled = true
+          console.log("Reconnect(): Websocket connection failed/died; trying again in 5 seconds")
+          setTimeout(this.connect, 5000)
+        }
+      },
+      'handleSocketConnected': function(event) {
+        console.log("Connection established")
+        this.doPing()
+      },
+      'handleSocketClosed': function(event) {
+        console.log("handleSocketClosed(): Calling reconnect")
+        this.reconnect()
+      },
+      'handleSocketError': function(event) {
+        console.log("handleSocketError(): " + event)
+        if (this.socket.readyState !== 1) {
+          console.log(" - Websocket connection had an error and disconnected; calling reconnect")
+          this.reconnect()
+        }
+      },
+      'doPing': function() {
+        if (this.socket.readyState === 1) {
+          console.log("PING")
+          this.socket.send(JSON.stringify({type: "ping"}))
+          setTimeout(this.doPing, 20000)
+        } else {
+          console.log("Websocket died; stopping ping")
+        }
       }
 
     },

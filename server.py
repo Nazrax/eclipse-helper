@@ -214,6 +214,16 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
   async def on_message(self, message):
     logging.info("Got message %r for %s" % (message, self.game_id))
     parsed = json.loads(message)
+
+    message_type = parsed['type']
+    if message_type == 'ping':
+      logging.info(f"Got ping from {self.game_id}")
+    elif message_type == 'tech':
+      await self.update_tech(parsed)
+    else:
+      logging.warning(f"Got message with invalid action: {parsed}")
+
+  async def update_tech(self, parsed):
     tech_key = parsed['key']
     field = parsed['field']
     action = parsed['action']
@@ -221,7 +231,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     game = Game(self.game_id)
 
     if tech_key not in game.techs:
-      logging.warning("Invalid tech key provided: %s" % message)
+      logging.warning("Invalid tech key provided: %s" % parsed)
       return
 
     tech = game.techs[tech_key]
@@ -235,7 +245,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
       ceiling = tech['drawn']
       floor = 0
     else:
-      logging.warning("Invalid field attempted: %s" % message)
+      logging.warning("Invalid field attempted: %s" % parsed)
       return
 
     if action == 'inc':
@@ -251,7 +261,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
       else:
         logging.warning(f"Trying to lower {field} below %d" % floor)
     else:
-      logging.warning("Invalid action attempted: %s" % message)
+      logging.warning("Invalid action attempted: %s" % parsed)
       return
 
     if send_updates:

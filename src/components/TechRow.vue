@@ -52,19 +52,19 @@
     methods: {
       draw: function() {
         console.log("Drawing")
-        this['socket'].send(JSON.stringify({key: this['tech'].key, field: 'drawn', action: "inc"}))
+        this['socket'].send(JSON.stringify({type: 'tech', key: this['tech'].key, field: 'drawn', action: "inc"}))
       },
       undraw: function() {
         console.log("Undrawing")
-        this['socket'].send(JSON.stringify({key: this['tech'].key, field: 'drawn', action: "dec"}))
+        this['socket'].send(JSON.stringify({type: 'tech', key: this['tech'].key, field: 'drawn', action: "dec"}))
       },
       purchase: function() {
         console.log("Purchasing")
-        this['socket'].send(JSON.stringify({key: this['tech'].key, field: 'used', action: "inc"}))
+        this['socket'].send(JSON.stringify({type: 'tech', key: this['tech'].key, field: 'used', action: "inc"}))
       },
       unpurchase: function() {
         console.log("Unpurchasing")
-        this['socket'].send(JSON.stringify({key: this['tech'].key, field: 'used', action: "dec"}))
+        this['socket'].send(JSON.stringify({type: 'tech', key: this['tech'].key, field: 'used', action: "dec"}))
       },
     },
   }
