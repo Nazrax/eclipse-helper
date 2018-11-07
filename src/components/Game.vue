@@ -103,7 +103,6 @@
       },
       'doPing': function() {
         if (this.socket.readyState === 1) {
-          console.log("PING")
           this.socket.send(JSON.stringify({type: "ping"}))
           setTimeout(this.doPing, 20000)
         } else {
