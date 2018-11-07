@@ -222,12 +222,12 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     type(self).game_clients[self.game_id].remove(self)
 
   @classmethod
-  def send_updates(cls, game_id, msg):
+  async def send_updates(cls, game_id, msg):
     logging.info("Sending message to %d clients", len(cls.game_clients[game_id]))
     for client in cls.game_clients[game_id]:
       # noinspection PyBroadException
       try:
-        client.write_message(msg)
+        await client.write_message(msg)
       except Exception:
         logging.error("Error sending message", exc_info=True)
 
@@ -287,7 +287,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     if send_updates:
       logging.info(f"{tech_key}:{field} is now {tech[field]}")
       await set_key_cas(f"{self.game_id}/{tech_key}/{field}", -1, tech[field])
-      type(self).send_updates(self.game_id, json.dumps({'key': tech_key, 'field': field, 'value': tech[field]}))
+      await type(self).send_updates(self.game_id, json.dumps({'key': tech_key, 'field': field, 'value': tech[field]}))
 
 
 async def create_pool(redis_url):
