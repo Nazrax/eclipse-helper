@@ -20,8 +20,9 @@ import aioredis
 
 
 DIST_PATH = os.path.join(os.path.dirname(__file__), "dist")
-STATIC_PATH = os.path.join(DIST_PATH, 'static')
 DATA_PATH = os.path.join(os.path.dirname(__file__), "data")
+IMAGES_PATH = os.path.join(os.path.dirname(__file__), "static", "images")
+STATIC_PATH = os.path.join(DIST_PATH, 'static')
 DEV_MODE = False
 TECHS_JSON_RE = re.compile(r"^/techs/(\w+).json$")
 WS_JSON_RE = re.compile(r"^/websocket/(\w+)$")
@@ -101,6 +102,8 @@ class Game:
         tech['minCost'] = stats[i]['minCost']
         tech['count'] = stats[i]['count']
         tech['color'] = color
+        tech['top'] = cls.colors[color]['position']
+        tech['left'] = stats[i]['position']
 
         cls.tech_cache[tech['key']] = tech
         cls.categories[tech['category']]['techs'].append(tech['key'])
@@ -115,6 +118,8 @@ class Application(tornado.web.Application):
       (r"/", DefaultHandler),
       (r"/techs/.*", TechsJsonHandler),
       (r"/websocket/.*", WebSocketHandler),
+      (r"/images/(.*)", tornado.web.StaticFileHandler, {'path': IMAGES_PATH}),
+      (r"/settings.json", SettingsHandler),
       # (r"/foo", MainHandler),
       # (r"/.*", DefaultHandler)
       # (r"/techs.js", TechsJsHandler),
@@ -130,6 +135,21 @@ class Application(tornado.web.Application):
       default_handler_class=DefaultHandler
     )
     super().__init__(handlers, **settings)
+
+
+class SettingsHandler(tornado.web.RequestHandler):
+  def data_received(self, chunk):
+    raise NotImplementedError
+
+  def get(self, *args, **kwargs):
+    logging.info("Serving up settings.json")
+    settings = {
+      'available_checkbox_url': os.environ.get('AVAILABLE_CHECKBOX_URL', '/images/available_checkbox.png'),
+      'empty_checkbox_url': os.environ.get('EMPTY_CHECKBOX_URL', '/images/empty_checkbox.png'),
+      'taken_checkbox_url': os.environ.get('TAKEN_CHECKBOX_URL', '/images/taken_checkbox.png'),
+      'techboard_url': os.environ.get('TECHBOARD_URL', '/images/empty_techboard.png')
+    }
+    self.write(json.dumps(settings))
 
 
 class DefaultHandler(tornado.web.RequestHandler):

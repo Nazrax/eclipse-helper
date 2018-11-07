@@ -5,9 +5,9 @@
     <button @click="setComponent('techs-by-category')">Categories</button>
     <button @click="setComponent('techs-by-color')">Colors</button>
     <button @click="setComponent('all-techs')">All</button>
+    <button @click="setComponent('graphical-techs')">Graphical</button>
 
-
-    <component :is="currentComponent" :categories="categories" :colors="colors" :techs="techs" :socket="socket"></component>
+    <component :is="currentComponent" :categories="categories" :colors="colors" :techs="techs" :socket="socket" :settings="settings"></component>
   </div>
 </template>
 
@@ -16,6 +16,7 @@
   import TechsByColor from '@/components/TechsByColor'
   import TechsByCategory from '@/components/TechsByCategory'
   import AllTechs from '@/components/AllTechs'
+  import GraphicalTechs from '@/components/GraphicalTechs'
 
   export default {
     name: "Game",
@@ -27,10 +28,11 @@
         colors: {},
         socket: null,
         currentComponent: 'techs-by-category',
-        reconnectScheduled: false
+        reconnectScheduled: false,
+        settings: {}
       }
     },
-    created() {
+    created: function() {
       axios.get(`/techs/${this.id}.json`)
         .then(response => {
           this.techs = response.data.techs
@@ -40,9 +42,17 @@
         .catch(e => {
           console.log("Axios error: " + e)
         })
+      axios.get('/settings.json')
+        .then(response => {
+          this.settings = response.data
+        })
+        .catch(e => {
+          console.log("Axios error: " + e)
+        })
     },
     mounted: function() {
       this.connect()
+      document.title = `Eclipse: ${this.id}`
     },
     methods: {
       'handleMessage': function(event) {
@@ -105,7 +115,8 @@
     components: {
       'techs-by-color': TechsByColor,
       'techs-by-category': TechsByCategory,
-      'all-techs': AllTechs
+      'all-techs': AllTechs,
+      'graphical-techs': GraphicalTechs
     }
   }
 </script>
