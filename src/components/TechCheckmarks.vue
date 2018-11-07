@@ -1,7 +1,7 @@
 <template>
   <div :class="{checks: useImages}" :style="divStyle">
     <template v-for="i in tech.count">
-      <img v-if="useImages" :src="imgFor(i-1)" class="check"/>
+      <img v-if="useImages" :src="imgFor(i-1)" @click="handleClick(i-1)" class="check"/>
       <span v-else v-html="tagFor(i-1)"></span>
     </template>
   </div>
@@ -14,7 +14,7 @@
 
   export default {
     name: "TechCheckmarks",
-    props: ['tech', 'top', 'left', 'settings'],
+    props: ['tech', 'top', 'left', 'settings', 'socket'],
     computed: {
       divStyle: function() {
         console.log("Calculating style: " + this.useImages)
@@ -34,6 +34,32 @@
       }
     },
     methods: {
+      handleClick: function(i) {
+        let drawn = this['tech'].drawn
+        let used = this['tech'].used
+        if (i === drawn) {
+          this.draw()
+        } else if (i === used && i < drawn) {
+          this.purchase()
+        } else if (i === used-1 && i === drawn-1) {
+          this.unpurchase()
+          this.undraw()
+        } else if (i === drawn-1) {
+          this.undraw()
+        }
+      },
+      draw: function() {  // TODO Extract these into some kind of utility class
+        this['socket'].send(JSON.stringify({type: 'tech', key: this['tech'].key, field: 'drawn', action: "inc"}))
+      },
+      undraw: function() {
+        this['socket'].send(JSON.stringify({type: 'tech', key: this['tech'].key, field: 'drawn', action: "dec"}))
+      },
+      purchase: function() {
+        this['socket'].send(JSON.stringify({type: 'tech', key: this['tech'].key, field: 'used', action: "inc"}))
+      },
+      unpurchase: function() {
+        this['socket'].send(JSON.stringify({type: 'tech', key: this['tech'].key, field: 'used', action: "dec"}))
+      },
       whatIs: function(i) {
         if (i < this['tech'].drawn) {
           if (i < this['tech'].used) {
@@ -78,7 +104,6 @@
     width: 10.5%;
     text-align: center;
     font-size: 0px;
-    border: solid;
   }
 
   .check {

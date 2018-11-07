@@ -3,7 +3,7 @@
     <div class="techboard-wrapper">
       <div class="techboard">
         <img :src="settings['techboard_url']" class="techboard"/>
-        <tech-checkmarks v-for="tech in techs" :key="tech['key']" :tech="tech" :top="tech['top']" :left="tech['left']" :settings="settings">
+        <tech-checkmarks v-for="tech in techs" :key="tech['key']" :tech="tech" :top="tech['top']" :left="tech['left']" :settings="settings" :socket="socket">
         </tech-checkmarks>
       </div>
     </div>
