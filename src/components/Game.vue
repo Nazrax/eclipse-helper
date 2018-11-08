@@ -41,8 +41,8 @@
     <component :is="currentComponent" :categories="categories" :colors="colors" :techs="techs" :socket="socket" :settings="settings" :mode="mode"></component>
 
     <div class="fixed-footer" v-if="showRoundPrompt">
-      <div class="centered">
-        Round started {{ roundMinutes }} minutes ago.
+      <div>
+        Round started {{ roundMinutes }} minutes ago.<br/>
         <a class="button is-warning is-small"@click="startNewRound()">Start new round</a>
       </div>
     </div>
@@ -280,13 +280,13 @@
     text-align: center;
     vertical-align: middle;
     font-size: 125%;
-    height: 50px;
+    height: 75px;
   }
   .centered {
     margin: 0;
     position: absolute;
     top: 50%;
-    left: 50%;
+    /*left: 50%;*/
     transform: translate(-50%, -50%);
     font-size: 100%;
   }
