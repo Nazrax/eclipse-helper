@@ -2,7 +2,7 @@
   <div>
     <h1>All techs!</h1>
     <table border="1">
-      <tr><td>Name</td><td>Power</td><td>Cost</td><td>Used</td><td>Drawn</td><td>Purchased</td></tr>
+      <tr><td>Name</td><td>Power</td><td>Cost</td><td>Taken</td><td>Drawn</td><td>Purchased</td></tr>
       <tr is="tech-row" v-for="techKey in sortByName(Object.keys(techs))" :tech="techs[techKey]" :socket="socket"></tr>
     </table>
 

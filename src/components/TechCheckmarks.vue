@@ -8,6 +8,8 @@
 </template>
 
 <script>
+  import { socketMixin} from "@/mixins/WSUtils"
+
   const emptyBox = "☐"
   const checkedBox = "☑"
   const xBox = "☒"
@@ -15,15 +17,14 @@
   export default {
     name: "TechCheckmarks",
     props: ['tech', 'top', 'left', 'settings', 'socket'],
+    mixins: [socketMixin],
     computed: {
       divStyle: function() {
-        console.log("Calculating style: " + this.useImages)
         if (this.useImages) {
           let rv = {
                       top: this.top,
                       left: this.left
                     }
-          console.log("Returning " + JSON.stringify(rv))
           return rv
         } else {
           return {}
@@ -47,18 +48,6 @@
         } else if (i === drawn-1) {
           this.undraw()
         }
-      },
-      draw: function() {  // TODO Extract these into some kind of utility class
-        this['socket'].send(JSON.stringify({type: 'tech', key: this['tech'].key, field: 'drawn', action: "inc"}))
-      },
-      undraw: function() {
-        this['socket'].send(JSON.stringify({type: 'tech', key: this['tech'].key, field: 'drawn', action: "dec"}))
-      },
-      purchase: function() {
-        this['socket'].send(JSON.stringify({type: 'tech', key: this['tech'].key, field: 'used', action: "inc"}))
-      },
-      unpurchase: function() {
-        this['socket'].send(JSON.stringify({type: 'tech', key: this['tech'].key, field: 'used', action: "dec"}))
       },
       whatIs: function(i) {
         if (i < this['tech'].drawn) {

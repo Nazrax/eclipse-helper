@@ -1,7 +1,7 @@
 <template>
-  <table border="1">
-    <tr><td>Name</td><td>Power</td><td>Cost</td><td>Used</td><td>Drawn</td><td>Purchased</td></tr>
-    <tr is="tech-row" v-for="techKey in sortedTechKeys" v-bind:tech="techs[techKey]" v-bind:socket="socket" use-description="true"></tr>
+  <table border="1" style="margin:auto">
+    <tr><td>Avail</td><td>Name</td><td>Power</td><td>Cost</td><td>{{mode}}</td></tr>
+    <tr is="tech-row" v-for="techKey in sortedTechKeys" v-bind:tech="techs[techKey]" v-bind:socket="socket" use-description="true" :mode="mode"></tr>
   </table>
 </template>
 
@@ -10,7 +10,7 @@
 
   export default {
     name: "techs-by-category2",
-    props: ['techs', 'techKeys', 'socket'],
+    props: ['techs', 'techKeys', 'socket', 'mode'],
     components: {
       'tech-row': TechRow
     },

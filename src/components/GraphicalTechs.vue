@@ -8,13 +8,13 @@
       </div>
     </div>
 
-    <table>
+    <table style="margin: auto">
       <tr>
         <td>
-          <techs-by-category2 :techs="techs" :tech-keys="categories['ship'].techs" :socket="socket"></techs-by-category2>
+          <techs-by-category2 :techs="techs" :tech-keys="categories['ship'].techs" :socket="socket" :mode="mode"></techs-by-category2>
         </td>
         <td>
-          <techs-by-category2 :techs="techs" :tech-keys="categories['other'].techs" :socket="socket"></techs-by-category2>
+          <techs-by-category2 :techs="techs" :tech-keys="categories['other'].techs" :socket="socket" :mode="mode"></techs-by-category2>
         </td>
       </tr>
     </table>
@@ -29,7 +29,7 @@
 
   export default {
     name: "GraphicalTechs",
-    props: ['techs', 'socket', 'categories', 'settings'],
+    props: ['techs', 'socket', 'categories', 'settings', 'mode'],
     components: {
       'tech-checkmarks': TechCheckmarks,
       'techs-by-category2': TechsByCategory2

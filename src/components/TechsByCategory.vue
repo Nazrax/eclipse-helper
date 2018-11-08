@@ -6,7 +6,7 @@
       <button @click="showCategory('other')">Civilization</button>
     </p>
     <p>{{ categories[currentCategory] && categories[currentCategory].name }}</p>
-    <techs-by-category2 v-if="categories[currentCategory]" :techs="techs" :tech-keys="categories[currentCategory].techs" :socket="socket"></techs-by-category2>
+    <techs-by-category2 v-if="categories[currentCategory]" :techs="techs" :tech-keys="categories[currentCategory].techs" :socket="socket" :mode="mode"></techs-by-category2>
 
     <!--<ul>-->
       <!--<li v-for="categoryKey in Object.keys(categories)">{{ categories[categoryKey].name }}:-->
@@ -18,6 +18,7 @@
 
 <script>
   import TechsByCategory2 from '@/components/TechsByCategory2'
+
   export default {
     name: "TechsByCategory",
     data: function() {
@@ -25,7 +26,7 @@
         currentCategory: 'other'
       }
     },
-    props: ['categories', 'techs', 'socket'],
+    props: ['categories', 'techs', 'socket', 'mode'],
     components: {
       'techs-by-category2': TechsByCategory2
     },

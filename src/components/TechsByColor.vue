@@ -7,7 +7,7 @@
       <button @click="showColor('yellow')">Yellow</button>
     </p>
     <p>{{ colors[currentColor] && colors[currentColor].name }}</p>
-    <techs-by-color2 v-if="colors[currentColor]" :techs="techs" :tech-keys="colors[currentColor].techs" :socket="socket"></techs-by-color2>
+    <techs-by-color2 v-if="colors[currentColor]" :techs="techs" :tech-keys="colors[currentColor].techs" :socket="socket" :mode="mode"></techs-by-color2>
 
     <!--<ul>-->
       <!--<li v-for="colorKey in sortByIndex(Object.keys(colors))">{{ colors[colorKey].name }}:-->
@@ -22,7 +22,7 @@
 
   export default {
     name: "TechsByColor",
-    props: ['colors', 'techs', 'socket'],
+    props: ['colors', 'techs', 'socket', 'mode'],
     data: function() {
       return {
         'currentColor': 'red'

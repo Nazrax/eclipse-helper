@@ -1,13 +1,18 @@
 <template>
   <div>
-    <p>This is game {{ id }}</p>
+    <h2>Game ID: {{this.id}}</h2>
+    <p>
+      <button @click="setComponent('techs-by-category')">Categories</button>
+      <button @click="setComponent('techs-by-color')">Colors</button>
+      <button @click="setComponent('all-techs')">All</button>
+      <button @click="setComponent('graphical-techs')">Graphical</button>
+    </p>
+    <p>
+      <button @click="setMode('take')">Take</button>
+      <button @click="setMode('draw')">Draw</button>
+    </p>
 
-    <button @click="setComponent('techs-by-category')">Categories</button>
-    <button @click="setComponent('techs-by-color')">Colors</button>
-    <button @click="setComponent('all-techs')">All</button>
-    <button @click="setComponent('graphical-techs')">Graphical</button>
-
-    <component :is="currentComponent" :categories="categories" :colors="colors" :techs="techs" :socket="socket" :settings="settings"></component>
+    <component :is="currentComponent" :categories="categories" :colors="colors" :techs="techs" :socket="socket" :settings="settings" :mode="mode"></component>
   </div>
 </template>
 
@@ -29,7 +34,8 @@
         socket: null,
         currentComponent: 'techs-by-category',
         reconnectScheduled: false,
-        settings: {}
+        settings: {},
+        mode: 'take'
       }
     },
     created: function() {
@@ -55,6 +61,9 @@
       document.title = `Eclipse: ${this.id}`
     },
     methods: {
+      'setMode': function(mode) {
+        this.mode = mode
+      },
       'handleMessage': function(event) {
         // console.log(`Got '${event.data}' from socket`)
         let parsed = JSON.parse(event.data)
