@@ -67,11 +67,11 @@
       imgFor: function(i) {
         let thing = this.whatIs(i)
         if (thing === 'taken') {
-          return this.settings['taken_checkbox_url']
+          return "/images/techboard/taken_checkbox.png"
         } else if (thing === 'available') {
-          return this.settings['available_checkbox_url']
+          return "/images/techboard/available_checkbox.png"
         } else if (thing === 'empty') {
-          return this.settings['empty_checkbox_url']
+          return "/images/techboard/empty_checkbox.png"
         } else {
           return "IMPOSSIBLE"
         }

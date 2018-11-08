@@ -1,7 +1,11 @@
 <template>
   <tr>
     <td style="text-align: right"><tech-checkmarks :tech="tech"></tech-checkmarks></td>
-    <td>{{ label }}</td>
+    <td>
+      <a @click="showDetails()">{{ label }}</a>
+      <b-modal :active.sync="isModalActive" has-modal-card><tech-detail :tech="tech"></tech-detail></b-modal>
+      {{ isModalActive }}
+    </td>
     <td >{{ power }}</td>
     <td style="text-align: right">{{ tech.cost }} / {{ tech.minCost }}</td>
     <template v-if="mode == 'draw'">
@@ -14,11 +18,17 @@
 </template>
 
 <script>
-  import TechCheckmarks from "./TechCheckmarks"
+  import TechCheckmarks from "@/components/TechCheckmarks"
+  import TechDetail from "@/components/TechDetail"
   import { socketMixin} from "@/mixins/WSUtils"
 
   export default {
-    components: {TechCheckmarks},
+    components: { TechCheckmarks, TechDetail },
+    data: function() {
+      return {
+        isModalActive: false
+      }
+    },
     props: ['tech', 'socket', 'useDescription', 'mode'],
     mixins: [socketMixin],
     computed: {
@@ -38,6 +48,11 @@
       power: function() {
         return this['tech'].hasOwnProperty('power') ? `${this['tech'].power}⚡`  : ''
       },
+    },
+    methods: {
+      showDetails: function() {
+        this.isModalActive = true
+      }
     }
   }
 </script>

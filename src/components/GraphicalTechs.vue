@@ -2,7 +2,7 @@
   <div>
     <div class="techboard-wrapper">
       <div class="techboard">
-        <img :src="settings['techboard_url']" class="techboard"/>
+        <img src="/images/techboard/empty_techboard.jpg" class="techboard"/>
         <tech-checkmarks v-for="tech in techs" :key="tech['key']" :tech="tech" :top="tech['top']" :left="tech['left']" :settings="settings" :socket="socket" :mode="mode">
         </tech-checkmarks>
       </div>
