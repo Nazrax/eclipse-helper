@@ -16,7 +16,7 @@
 
   export default {
     name: "TechCheckmarks",
-    props: ['tech', 'top', 'left', 'settings', 'socket'],
+    props: ['tech', 'top', 'left', 'settings', 'socket', 'mode'],
     mixins: [socketMixin],
     computed: {
       divStyle: function() {
@@ -38,15 +38,19 @@
       handleClick: function(i) {
         let drawn = this['tech'].drawn
         let used = this['tech'].used
-        if (i === drawn) {
-          this.draw()
-        } else if (i === used && i < drawn) {
-          this.purchase()
-        } else if (i === used-1 && i === drawn-1) {
-          this.unpurchase()
-          this.undraw()
-        } else if (i === drawn-1) {
-          this.undraw()
+        console.log(`I: ${i} D: ${drawn} U: ${used} M: ${this.mode}`)
+        if (this.mode === 'draw') {
+          if (i === drawn) {
+            this.draw()
+          } else if (i === drawn - 1 && i >= used) {
+            this.undraw()
+          }
+        } else if (this.mode === 'take') {
+          if (i === used && i < drawn) {
+            this.purchase()
+          } else if (i === used - 1) {
+            this.unpurchase()
+          }
         }
       },
       whatIs: function(i) {
