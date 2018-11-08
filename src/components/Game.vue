@@ -278,8 +278,9 @@
     background-color: cyan;
     color: black;
     text-align: center;
+    vertical-align: middle;
     font-size: 125%;
-    height: 40px;
+    height: 50px;
   }
   .centered {
     margin: 0;
@@ -287,6 +288,6 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 200%;
+    font-size: 100%;
   }
 </style>

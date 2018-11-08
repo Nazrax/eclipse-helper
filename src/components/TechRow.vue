@@ -3,15 +3,21 @@
     <td style="text-align: right"><tech-checkmarks :tech="tech"></tech-checkmarks></td>
     <td>
       <a @click="showDetails()">{{ label }}</a>
-      <b-modal :active.sync="isModalActive" has-modal-card><tech-detail :tech="tech"></tech-detail></b-modal>
+      <b-modal :active.sync="isModalActive" has-modal-card><tech-detail :tech="tech" :socket="socket"></tech-detail></b-modal>
     </td>
     <td >{{ power }}</td>
     <td style="text-align: right">{{ tech.cost }} / {{ tech.minCost }}</td>
     <template v-if="mode == 'draw'">
-      <td><a class="button is-success is-small" @click="draw">Draw</a><a class="button is-danger is-small" @click="undraw">Return</a></td>
+      <td>
+        <a class="button is-success is-small" @click="draw">Draw</a>
+        <!--<a class="button is-danger is-small" @click="undraw">Return</a>-->
+      </td>
     </template>
     <template v-else>
-      <td><a class="button is-success is-small" @click="purchase">Take</a><a class="button is-danger is-small" @click="unpurchase">Return</a></td>
+      <td>
+        <a class="button is-success is-small" @click="purchase">Take</a>
+        <!--<a class="button is-danger is-small" @click="unpurchase">Return</a>-->
+      </td>
     </template>
   </tr>
 </template>
