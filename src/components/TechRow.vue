@@ -4,7 +4,6 @@
     <td>
       <a @click="showDetails()">{{ label }}</a>
       <b-modal :active.sync="isModalActive" has-modal-card><tech-detail :tech="tech"></tech-detail></b-modal>
-      {{ isModalActive }}
     </td>
     <td >{{ power }}</td>
     <td style="text-align: right">{{ tech.cost }} / {{ tech.minCost }}</td>
