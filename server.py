@@ -232,12 +232,15 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         logging.error("Error sending message", exc_info=True)
 
   async def on_message(self, message):
-    logging.info("Got message %r for %s" % (message, self.game_id))
     parsed = json.loads(message)
+
+    if parsed['type'] != 'ping':
+      logging.info("Got message %r for %s" % (message, self.game_id))
 
     message_type = parsed['type']
     if message_type == 'ping':
-      logging.info(f"Got ping from {self.game_id}")
+      # logging.info(f"Got ping from {self.game_id}")
+      pass
     elif message_type == 'tech':
       await self.update_tech(parsed)
     else:
@@ -287,7 +290,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     if send_updates:
       logging.info(f"{tech_key}:{field} is now {tech[field]}")
       await set_key_cas(f"{self.game_id}/{tech_key}/{field}", -1, tech[field])
-      await type(self).send_updates(self.game_id, json.dumps({'key': tech_key, 'field': field, 'value': tech[field]}))
+      await type(self).send_updates(self.game_id, json.dumps({'type': 'tech', 'key': tech_key, 'field': field, 'value': tech[field]}))
 
 
 async def create_pool(redis_url):

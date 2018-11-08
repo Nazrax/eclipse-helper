@@ -56,11 +56,15 @@
     },
     methods: {
       'handleMessage': function(event) {
-        console.log(`Got '${event.data}' from socket`)
+        // console.log(`Got '${event.data}' from socket`)
         let parsed = JSON.parse(event.data)
-        console.log(`Setting ${parsed['key']}:${parsed['field']} to ${parsed['value']}`)
-        let tech = this.techs[parsed['key']]
-        this.$set(tech, parsed['field'], parsed['value'])
+        if (parsed['type'] === 'tech') {
+          // console.log(` - Tech: Setting ${parsed['key']}:${parsed['field']} to ${parsed['value']}`)
+          let tech = this.techs[parsed['key']]
+          this.$set(tech, parsed['field'], parsed['value'])
+        } else {
+          console.log(` - Unknown message type ${parsed}`)
+        }
       },
       'setComponent': function(component) {
         this.currentComponent = component
