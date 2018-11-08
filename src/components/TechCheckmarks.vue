@@ -2,7 +2,7 @@
   <div :class="{checks: useImages}" :style="divStyle">
     <template v-for="i in tech.count">
       <img v-if="useImages" :src="imgFor(i-1)" @click="handleClick(i-1)" class="check"/>
-      <span v-else v-html="tagFor(i-1)"></span>
+      <span v-else v-html="tagFor(i-1)" class="text-checks centered"></span>
     </template>
   </div>
 </template>
@@ -100,11 +100,19 @@
   }
 
   .check {
-    width: 15%;
+    width: 18%;
     margin-left: 0%;
     margin-right: 0%;
     padding-left: 2%;
     padding-right: 2%;
     font-size: 0;
+  }
+
+  .text-checks {
+    font-size: 125%;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 </style>

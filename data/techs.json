@@ -40,7 +40,7 @@
       {
         "name": "Gluon Computer",
         "category": "ship",
-        "description": "Computer: +3🎯 / +2^",
+        "description": "Computer: +3🎯 +2^",
         "power": 2
       }
     ],
@@ -65,7 +65,7 @@
       {
         "name": "Positron Computer",
         "category": "ship",
-        "description": "Computer: +2 🎯 / +1^",
+        "description": "Computer: +2🎯 +1^",
         "power": 1
       },
       {
@@ -135,67 +135,56 @@
     {
       "cost": 2,
       "minCost": 2,
-      "count": 5,
-      "position": "5%"
+      "count": 5
     },
     {
       "cost": 4,
       "minCost": 3,
-      "count": 5,
-      "position": "16.3%"
+      "count": 5
     },
     {
       "cost": 6,
       "minCost": 4,
-      "count": 5,
-      "position": "27.6%"
+      "count": 5
     },
     {
       "cost": 8,
       "minCost": 5,
-      "count": 4,
-      "position": "38.9%"
+      "count": 4
     },
     {
       "cost": 10,
       "minCost": 6,
-      "count": 4,
-      "position": "50.2%"
+      "count": 4
     },
     {
       "cost": 12,
       "minCost": 6,
-      "count": 3,
-      "position": "61.5%"
+      "count": 3
     },
     {
       "cost": 14,
       "minCost": 7,
-      "count": 3,
-      "position": "72.8%"
+      "count": 3
     },
     {
       "cost": 16,
       "minCost": 8,
-      "count": 3,
-      "position": "84.1%"
+      "count": 3
     }
   ],
   "colors": {
     "red": {
       "name": "Red",
-      "index": 0,
-      "position": "31%"
+      "index": 0
     },
     "blue": {
       "name": "Blue",
-      "index": 1,
-      "position": "59.5%"
+      "index": 1
     },
     "yellow": {
       "name": "Yellow",
-      "index": 2,
-      "position": "88%"
+      "index": 2
     }
   },
   "categories": {

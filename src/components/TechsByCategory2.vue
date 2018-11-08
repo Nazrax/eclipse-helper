@@ -1,6 +1,6 @@
 <template>
   <table border="1" style="margin:auto">
-    <tr><td>Avail</td><td>Name</td><td>Power</td><td>Cost</td><td>{{mode}}</td></tr>
+    <tr><td>Avail</td><td>Name</td><td>⚡</td><td>Cost</td><td></td></tr>
     <tr is="tech-row" v-for="techKey in sortedTechKeys" v-bind:tech="techs[techKey]" v-bind:socket="socket" use-description="true" :mode="mode"></tr>
   </table>
 </template>

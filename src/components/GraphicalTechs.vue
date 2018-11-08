@@ -8,29 +8,21 @@
       </div>
     </div>
 
-    <table style="margin: auto">
-      <tr>
-        <td>
-          <techs-by-category2 :techs="techs" :tech-keys="categories['ship'].techs" :socket="socket" :mode="mode"></techs-by-category2>
-        </td>
-        <td>
-          <techs-by-category2 :techs="techs" :tech-keys="categories['other'].techs" :socket="socket" :mode="mode"></techs-by-category2>
-        </td>
-      </tr>
-    </table>
+    <!--<techs-by-category :categories="categories" :colors="colors" :techs="techs" :socket="socket" :settings="settings" :mode="mode"></techs-by-category>-->
+
   </div>
 </template>
 
 <script>
   import TechCheckmarks from '@/components/TechCheckmarks'
-  import TechsByCategory2 from '@/components/TechsByCategory2'
+  import TechsByCategory from '@/components/TechsByCategory'
 
   export default {
     name: "GraphicalTechs",
     props: ['techs', 'socket', 'categories', 'settings', 'mode'],
     components: {
-      'tech-checkmarks': TechCheckmarks,
-      'techs-by-category2': TechsByCategory2
+      TechCheckmarks,
+      TechsByCategory
     }
   }
 </script>

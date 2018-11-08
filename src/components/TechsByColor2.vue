@@ -1,7 +1,7 @@
 <template>
   <table border="1" style="margin:auto">
-    <tr><td>Avail</td><td>Name</td><td>Power</td><td>Cost</td><td>{{mode}}</td></tr>
-    <tr is="tech-row" v-for="techKey in techKeys" v-bind:tech="techs[techKey]" v-bind:socket="socket" use-description="true" :mode="mode"></tr>
+    <tr><td>Avail</td><td>Name</td><td>⚡</td><td>Cost</td><td>{{mode}}</td></tr>
+    <tr is="tech-row" v-for="techKey in techKeys" v-bind:tech="techs[techKey]" v-bind:socket="socket" :mode="mode"></tr>
   </table>
 </template>
 

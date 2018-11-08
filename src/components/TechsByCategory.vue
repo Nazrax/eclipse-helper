@@ -1,18 +1,9 @@
 <template>
-  <div>
-    <h1>By category</h1>
-    <p>
-      <button @click="showCategory('ship')">Ship</button>
-      <button @click="showCategory('other')">Civilization</button>
-    </p>
-    <p>{{ categories[currentCategory] && categories[currentCategory].name }}</p>
-    <techs-by-category2 v-if="categories[currentCategory]" :techs="techs" :tech-keys="categories[currentCategory].techs" :socket="socket" :mode="mode"></techs-by-category2>
-
-    <!--<ul>-->
-      <!--<li v-for="categoryKey in Object.keys(categories)">{{ categories[categoryKey].name }}:-->
-        <!--<techs-by-category2 :techs="techs" :tech-keys="categories[categoryKey].techs" :socket="socket"></techs-by-category2>-->
-      <!--</li>-->
-    <!--</ul>-->
+  <div class="columns is-centered">
+    <div class="column is-narrow" v-for="categoryKey in Object.keys(categories)">
+      <div style="font-size: 150%; text-align: center ">{{ categories[categoryKey].name }}</div>
+      <techs-by-category2 :techs="techs" :tech-keys="categories[categoryKey].techs" :socket="socket" :mode="mode"></techs-by-category2>
+    </div>
   </div>
 </template>
 

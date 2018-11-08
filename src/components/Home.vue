@@ -5,10 +5,9 @@
         <h1 class="title has-text-centered">Create/Open Entry</h1>
         <div class="box">
           <form id="game-form" @submit.prevent="processForm">
-            <div class="field">
-              <label class="label">Game ID</label>
-              <input type="text" class="input" name="game-id" v-model="gameId"/>
-            </div>
+            <b-field label="Game ID">
+              <b-input v-model="gameId"></b-input>
+            </b-field>
             <div class="field has-text-right">
               <button type="submit" class="button">OK</button>
             </div>

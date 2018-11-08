@@ -1,19 +1,9 @@
 <template>
-  <div>
-    <h1>By color</h1>
-    <p>
-      <button @click="showColor('red')">Red</button>
-      <button @click="showColor('blue')">Blue</button>
-      <button @click="showColor('yellow')">Yellow</button>
-    </p>
-    <p>{{ colors[currentColor] && colors[currentColor].name }}</p>
-    <techs-by-color2 v-if="colors[currentColor]" :techs="techs" :tech-keys="colors[currentColor].techs" :socket="socket" :mode="mode"></techs-by-color2>
-
-    <!--<ul>-->
-      <!--<li v-for="colorKey in sortByIndex(Object.keys(colors))">{{ colors[colorKey].name }}:-->
-        <!--<techs-by-color2 :techs="techs" :tech-keys="colors[colorKey].techs" :socket="socket"></techs-by-color2>-->
-      <!--</li>-->
-    <!--</ul>-->
+  <div class="columns is-centered">
+    <div class="column is-narrow" v-for="colorKey in sortByIndex(Object.keys(colors))">
+      <div style="font-size: 150%; text-align: center ">{{ colors[colorKey].name }}</div>
+      <techs-by-color2 v-if="colors[currentColor]" :techs="techs" :tech-keys="colors[colorKey].techs" :socket="socket" :mode="mode"></techs-by-color2>
+    </div>
   </div>
 </template>
 

@@ -1,11 +1,12 @@
 <template>
-  <div>
-    <h1>All techs!</h1>
-    <table border="1">
-      <tr><td>Name</td><td>Power</td><td>Cost</td><td>Taken</td><td>Drawn</td><td>Purchased</td></tr>
-      <tr is="tech-row" v-for="techKey in sortByName(Object.keys(techs))" :tech="techs[techKey]" :socket="socket"></tr>
-    </table>
-
+  <div class="columns is-centered">
+    <div class="column">
+      <div style="font-size: 150%; text-align: center ">All Technologies</div>
+      <table border="1" style="margin:auto">
+        <tr><td>Avail</td><td>Name</td><td>⚡</td><td>Cost</td><td></td></tr>
+        <tr is="tech-row" v-for="techKey in sortByName(Object.keys(techs))" :tech="techs[techKey]" :socket="socket"></tr>
+      </table>
+    </div>
   </div>
 </template>
 

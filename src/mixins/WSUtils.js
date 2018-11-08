@@ -11,6 +11,6 @@ export const socketMixin = {
     },
     unpurchase: function () {
       this['socket'].send(JSON.stringify({type: 'tech', key: this['tech'].key, field: 'used', action: "dec"}))
-    }
+    },
   }
 }
