@@ -2,11 +2,23 @@
   <tr>
     <td style="text-align: right"><tech-checkmarks :tech="tech"></tech-checkmarks></td>
     <td>
-      <a @click="showDetails()">{{ label }}</a>
+      <a @click="showDetails()">
+        <template v-if="useDescription && tech.hasOwnProperty('description')">
+          <span style="display: inline-block">
+            {{ tech.description }}
+          </span>
+          <span style="display: inline-block">
+            ({{ tech.name }})
+          </span>
+        </template>
+        <template v-else>
+          {{ tech.name }}
+        </template>
+      </a>
       <b-modal :active.sync="isModalActive" has-modal-card><tech-detail :tech="tech" :socket="socket"></tech-detail></b-modal>
     </td>
     <td >{{ power }}</td>
-    <td style="text-align: right">{{ tech.cost }} / {{ tech.minCost }}</td>
+    <td style="text-align: right">{{ tech.cost }}&nbsp;/&nbsp;{{ tech.minCost }}</td>
     <template v-if="mode == 'draw'">
       <td>
         <a class="button is-success is-small" @click="draw">Draw</a>
@@ -43,7 +55,7 @@
           if (this['useDescription'] === 'only') {
             return tech.description
           } else if (this['useDescription'] === "after") {
-            return `${tech.name} (${tech.description})`
+            return `<span style='display: inline-block'>${tech.name}</span> (${tech.description})`
           } else {
             return `${tech.description} (${tech.name})`
           }
