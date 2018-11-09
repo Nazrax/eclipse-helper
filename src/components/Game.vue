@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="{'footer-padding': showRoundPrompt}">
     <nav class="navbar is-dark is-fixed-top" role="navigation" aria-label="dropdown navigation">
       <div class="navbar-brand">
         <a @click="handleRoundClicked()" class="navbar-item">Round {{round}}/9</a>
@@ -289,5 +289,8 @@
     /*left: 50%;*/
     transform: translate(-50%, -50%);
     font-size: 100%;
+  }
+  .footer-padding {
+    padding-bottom: 75px;
   }
 </style>
