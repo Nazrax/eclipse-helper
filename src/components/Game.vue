@@ -97,7 +97,7 @@
         return Math.floor(this.roundTime / 60)
       },
       showRoundPrompt: function() {
-        return this.round < 9 && this.mode === 'draw' && this.epoch - this.roundStartedAt > 10
+        return this.round < 9 && this.mode === 'draw' && this.epoch - this.roundStartedAt > 300
       }
     },
     created: function() {
